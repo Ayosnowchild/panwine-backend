@@ -1,7 +1,14 @@
 const express = require("express");
 const api = express();
-const { indexController, notFoundController } = require("./controllers");
+const {
+  indexController,
+  notFoundController,
+  authController,
+} = require("./controllers");
 const { AppStarter } = require("./utils");
+const {
+  validateSignUpMiddlewareData,
+} = require("./models/validators/auth.validator");
 const port = 7070;
 // form reading middleware configuration
 api.use(express.json());
@@ -14,6 +21,13 @@ api.use(
 );
 
 api.get("/", indexController);
+
+api.post(
+  "/signup",
+  validateSignUpMiddlewareData,
+  authController.SignupController
+);
+// api.post("/signup", authController.SignupController);
 
 api.all("*", notFoundController);
 
