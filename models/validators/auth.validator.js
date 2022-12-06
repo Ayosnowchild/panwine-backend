@@ -1,11 +1,11 @@
 const Joi = require("joi");
 
 const signupSchema = Joi.object({
-  username: Joi.string().required,
-  fullName: Joi.string().required,
-  email: Joi.string().required,
-  phone: Joi.string().required,
-  password: Joi.string().min(8).required,
+  username: Joi.string().required(),
+  fullName: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  password: Joi.string().min(8).required(),
 });
 
 const validateSignupData = (data) => {
