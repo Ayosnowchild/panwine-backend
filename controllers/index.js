@@ -1,5 +1,5 @@
 const authController = require("./auth.controller");
-
+const middleware = require("./middlewares");
 const indexController = (req, res) => {
   res.status(200).json({
     message: "hello from my api",
@@ -12,4 +12,9 @@ const notFoundController = (req, res) => {
   });
 };
 
-module.exports = { indexController, notFoundController, authController };
+module.exports = {
+  indexController,
+  notFoundController,
+  authController,
+  middleware,
+};

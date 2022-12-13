@@ -1,14 +1,7 @@
 const { User } = require("../models");
-const bcrypt = require("bcryptjs");
-
-const { validateSignupData } = require("../models/validators/auth.validator");
 
 const SignupController = async (req, res) => {
   try {
-    const { err } = validateSignupData(req.body);
-    if (err) {
-      return res.status(400).json(err);
-    }
     let userExist = await User.findOne({
       $or: [{ email: req.body.email }, { username: req.body.username }],
     });
@@ -17,15 +10,78 @@ const SignupController = async (req, res) => {
         message: "User already exists",
       });
     }
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
-    console.log(hash);
-    console.log(salt);
-    req.body.password = hash;
-    const user = await User.create(req.body);
-    res.status(201).json({
+    const user = new User(req.body);
+    const token = user.generateToken();
+    await user.save();
+    return res.status(201).json({
       message: "account created",
-      user,
+      user: {
+        _id: user._id,
+        email: user.email,
+        username: user.username,
+        phone: user.phone,
+        fullName: user.fullName,
+      },
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "internal server issues",
+    });
+  }
+};
+
+const loginController = async (req, res) => {
+  try {
+    let userExist = await User.findOne({
+      $or: [{ email: req.body.email }, { username: req.body.username }],
+    });
+    if (!userExist) {
+      return res.status(404).json({
+        message: "You have no account, signup instaed",
+      });
+    }
+    const passwordCorrect = userExist.checkPassword(req.body.password);
+    if (!passwordCorrect) {
+      return res.status(400).json({
+        message: "Incorrect password",
+      });
+    }
+    const token = userExist.generateToken();
+    return res.status(200).json({
+      message: "login succesful",
+      token,
+      user: {
+        _id: userExist._id,
+        fullName: userExist.fullName,
+        email: userExist.email,
+        phone: userExist.phone,
+        username: userExist.username,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "internal server issues",
+    });
+  }
+};
+
+const ChangePasswordController = async (req, res, next) => {
+  try {
+    const { password, oldPassword } = req.body;
+    const user = await User.findById(req.user._id);
+    let passwordCorrect = user.checkPassword(oldPassword);
+    if (!passwordCorrect) {
+      return res.status(400).json({
+        message: "password incorrect",
+      });
+    }
+    user.password = password;
+    user.save();
+    return res.status(200).json({
+      message: "password changed",
     });
   } catch (err) {
     console.log(err);
@@ -37,4 +93,6 @@ const SignupController = async (req, res) => {
 
 module.exports = {
   SignupController,
+  loginController,
+  ChangePasswordController,
 };
