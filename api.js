@@ -1,5 +1,6 @@
 const express = require("express");
 const api = express();
+const path = require("path");
 const {
   indexController,
   notFoundController,
@@ -23,7 +24,7 @@ api.use(
     extended: true,
   })
 );
-
+api.use(express.static(path.join(__dirname, "public")));
 api.get("/", indexController);
 
 api.post(
@@ -41,6 +42,8 @@ api.put(
 
   authController.ChangePasswordController
 );
+
+api.post("/forgot-password", authController.RequestPasswordResetController);
 
 api.all("*", notFoundController);
 

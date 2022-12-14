@@ -1,4 +1,6 @@
 const { User } = require("../models");
+const ejs = require("ejs");
+const path = require("path");
 
 const SignupController = async (req, res) => {
   try {
@@ -91,8 +93,29 @@ const ChangePasswordController = async (req, res, next) => {
   }
 };
 
+const RequestPasswordResetController = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: "email is required" });
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: " user not found" });
+    }
+    const templatePath = path.join(process.cwd(), "/views/index.ejs");
+    console.log("templatePath", templatePath);
+    res.send("ok");
+    // const body = await ejs.renderFile(__dirname + '/view/index.ejs')
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "internal server issues",
+    });
+  }
+};
+
 module.exports = {
   SignupController,
   loginController,
   ChangePasswordController,
+  RequestPasswordResetController,
 };
