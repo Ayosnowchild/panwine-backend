@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     username: String,
     phone: String,
     password: String,
+    resetToken: String,
     isAdmin: {
       type: Boolean,
       default: false,

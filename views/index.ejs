@@ -444,7 +444,7 @@
                                 <td align="left" style="padding:0;Margin:0;padding-bottom:20px">
                                   <p
                                     style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:30px;color:#4D4D4D;font-size:20px">
-                                    <strong>Dear Germiona!</strong>
+                                    <strong>Dear <%= user.firstName %></strong>
                                   </p>
                                 </td>
                               </tr>
@@ -452,9 +452,11 @@
                                 <td align="left" style="padding:0;Margin:0">
                                   <p
                                     style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'open sans', 'helvetica neue', helvetica, arial, sans-serif;line-height:30px;color:#4D4D4D;font-size:20px">
-                                    Thank you for being with&nbsp;us these 2&nbsp;years!<br>We&nbsp;have some gift for
-                                    you. Spin the drum and find out what bottle is&nbsp;waiting for you
-                                    at&nbsp;<strong>SuperWine shop</strong></p>
+                                    Someone triggered password reset&nbsp;use this link to&nbsp;reset<br>We&nbsp;ignore
+                                    if this is not by you
+                                    you.
+                                    <a href="<%= url %>">Reset Password</a>
+                                  </p>
                                 </td>
                               </tr>
                             </table>

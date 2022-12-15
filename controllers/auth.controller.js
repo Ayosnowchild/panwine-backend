@@ -1,6 +1,10 @@
 const { User } = require("../models");
 const ejs = require("ejs");
 const path = require("path");
+const crypto = require("crypto");
+const dotenv = require("dotenv");
+dotenv.config();
+const { SendEmail } = require("./services");
 
 const SignupController = async (req, res) => {
   try {
@@ -102,9 +106,22 @@ const RequestPasswordResetController = async (req, res) => {
       return res.status(404).json({ message: " user not found" });
     }
     const templatePath = path.join(process.cwd(), "/views/index.ejs");
-    console.log("templatePath", templatePath);
-    res.send("ok");
-    // const body = await ejs.renderFile(__dirname + '/view/index.ejs')
+    console.log(templatePath);
+    let resetToken = crypto.randomBytes(24).toString("hex");
+    console.log(resetToken);
+    user.resetToken = resetToken;
+    await user.save();
+    const url = process.env.FRONTEND_URL + "/password-reset/" + resetToken;
+    const body = await ejs.renderFile(templatePath, { user, url });
+    // console.log(body);
+    SendEmail({
+      receiver: user.email,
+      subject: "Panwine Password Reset",
+      body: body,
+    });
+    res.status(200).json({
+      message: "pasword reset sent, check your email",
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
