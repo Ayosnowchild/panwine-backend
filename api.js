@@ -5,6 +5,8 @@ const {
   indexController,
   notFoundController,
   authController,
+  productController,
+  categoryController,
   middleware,
 } = require("./controllers");
 const { AppStarter } = require("./utils");
@@ -39,11 +41,22 @@ api.put(
   "/password",
   validatePasswordChangeMiddlewareData,
   middleware.isTokenValid,
-
   authController.ChangePasswordController
 );
 
 api.post("/forgot-password", authController.RequestPasswordResetController);
+
+api.get("/category", categoryController.FetchAll);
+api.get("/category/:id", categoryController.FetchById);
+api.post("/category", middleware.isUserAdmin, categoryController.Create);
+api.put("/category/:id", middleware.isUserAdmin, categoryController.Update);
+api.delete("/category/:id", middleware.isUserAdmin, categoryController.Delete);
+
+api.post(
+  "/product",
+  middleware.isUserAdmin,
+  productController.CreateProductController
+);
 
 api.all("*", notFoundController);
 

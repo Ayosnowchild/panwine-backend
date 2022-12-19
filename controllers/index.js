@@ -1,4 +1,6 @@
 const authController = require("./auth.controller");
+const productController = require("./product.controller");
+const categoryController = require("./category.controller");
 const middleware = require("./middlewares");
 const indexController = (req, res) => {
   res.status(200).json({
@@ -17,4 +19,6 @@ module.exports = {
   notFoundController,
   authController,
   middleware,
+  productController,
+  categoryController,
 };

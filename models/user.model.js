@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
     resetToken: String,
     isAdmin: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamp: true }
@@ -29,6 +29,7 @@ userSchema.method("generateToken", function () {
       _id: this._id,
       email: this.email,
       username: this.username,
+      isAdmin: this.isAdmin,
     },
     process.env.JWT_SECRET,
     { issuer: "http://loaclhost:7070", expiresIn: "6h" }
