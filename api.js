@@ -15,6 +15,10 @@ const {
   validateLoginMiddlewareData,
   validatePasswordChangeMiddlewareData,
 } = require("./models/validators/auth.validator");
+const {
+  validateProductMiddleware,
+  validateProductUpdateMiddleware,
+} = require("./models/validators/product.validator");
 const { ChangePasswordController } = require("./controllers/auth.controller");
 const port = 7070;
 // form reading middleware configuration
@@ -52,10 +56,20 @@ api.post("/category", middleware.isUserAdmin, categoryController.Create);
 api.put("/category/:id", middleware.isUserAdmin, categoryController.Update);
 api.delete("/category/:id", middleware.isUserAdmin, categoryController.Delete);
 
-api.post("/product", middleware.isUserAdmin, productController.Create);
+api.post(
+  "/product",
+  middleware.isUserAdmin,
+  validateProductMiddleware,
+  productController.Create
+);
 api.get("/product", productController.FetchAll);
 api.get("/product/:id", productController.FetchById);
-api.put("/product/:id", middleware.isUserAdmin, productController.Update);
+api.put(
+  "/product/:id",
+  middleware.isUserAdmin,
+  validateProductUpdateMiddleware,
+  productController.Update
+);
 api.delete("/product/:id", middleware.isUserAdmin, productController.Delete);
 
 api.all("*", notFoundController);

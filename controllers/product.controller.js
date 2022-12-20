@@ -12,7 +12,7 @@ const Create = async (req, res) => {
       return res.status(400).json({ message: "parameter missing" });
     }
     let productExist = await Product.findOne({
-      $or: [{ name: req.body.name }, { category: req.body.category }],
+      $and: [{ name: req.body.name }, { category: req.body.category }],
     });
     if (productExist) {
       return res.status(400).json({
@@ -42,7 +42,7 @@ const Create = async (req, res) => {
 
 const FetchById = async (req, res) => {
   try {
-    let product = await Product.findById(req.params.id);
+    let product = await Product.findById(req.params.id).populate("category");
     if (!product) {
       return res.status(404).json({
         message: "product does not exist",
@@ -62,7 +62,7 @@ const FetchById = async (req, res) => {
 
 const FetchAll = async (req, res) => {
   try {
-    let products = await Product.find({});
+    let products = await Product.find({}).populate("category");
     return res.status(200).json({
       message: "products fetched",
       data: products,

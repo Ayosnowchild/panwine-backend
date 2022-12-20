@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
     },
     image: String,
-    stock: Number,
+    stock: { type: Number, defaults: 1 },
   },
   { timestamp: true }
 );
