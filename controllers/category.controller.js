@@ -60,7 +60,7 @@ const Update = async (req, res) => {
       return res.status(400).json({ message: "name is required" });
     }
     let category = await Category.findById(req.params.id);
-    await category.update(req.body);
+    await category.updateOne(req.body);
     return res.status(200).json({
       message: "category updated",
       data: category,

@@ -52,11 +52,11 @@ api.post("/category", middleware.isUserAdmin, categoryController.Create);
 api.put("/category/:id", middleware.isUserAdmin, categoryController.Update);
 api.delete("/category/:id", middleware.isUserAdmin, categoryController.Delete);
 
-api.post(
-  "/product",
-  middleware.isUserAdmin,
-  productController.CreateProductController
-);
+api.post("/product", middleware.isUserAdmin, productController.Create);
+api.get("/product", productController.FetchAll);
+api.get("/product/:id", productController.FetchById);
+api.put("/product/:id", middleware.isUserAdmin, productController.Update);
+api.delete("/product/:id", middleware.isUserAdmin, productController.Delete);
 
 api.all("*", notFoundController);
 
