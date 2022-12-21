@@ -14,11 +14,11 @@ const {
   validateSignUpMiddlewareData,
   validateLoginMiddlewareData,
   validatePasswordChangeMiddlewareData,
-} = require("./models/validators/auth.validator");
+} = require("./controllers/validators/auth.validator");
 const {
   validateProductMiddleware,
   validateProductUpdateMiddleware,
-} = require("./models/validators/product.validator");
+} = require("./controllers/validators/product.validator");
 const { ChangePasswordController } = require("./controllers/auth.controller");
 const port = 7070;
 // form reading middleware configuration
